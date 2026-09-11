@@ -26,7 +26,7 @@ Remove `data-draft` again before publishing. The gaps:
 | The Push-Up Challenge | Which year(s), team size, amount raised, nominated charity |
 | The identity | Logo files, colour and type specs, shopfront signage, merch, print work |
 | Closing the doors | The closing date, and how the closure was announced to members |
-| Get in touch | Email, phone, LinkedIn |
+| Get in touch | Email and phone (LinkedIn is linked already) |
 
 ## Decisions to confirm
 
@@ -95,9 +95,38 @@ Gathered with a headless browser, since both platforms block ordinary fetching.
   (headspace); 2020 target 3,046, 11–31 May (headspace); 2021 target 3,318, 1–25 June
   (headspace, Lifeline or Push for Better)
 
+## The sharing card
+
+When the link is pasted into LinkedIn, Facebook, Slack, X or WhatsApp, those
+platforms read `assets/img/og-card.jpg` (1200×630) and the `og:` tags in
+`index.html`.
+
+Right now the card shows Skye's name beside a 2×3 grid of real campaign posts,
+because **LinkedIn would not release her profile photo** — it returns HTTP 999
+to anything that isn't a signed-in browser, and no public copy was findable.
+
+**To use her photo instead:**
+
+1. Save the portrait as `assets/img/skye.jpg` (square or portrait, 600px or larger)
+2. `pip install pillow`
+3. `python3 tools/make-og-card.py`
+4. Commit both `assets/img/skye.jpg` and the regenerated `assets/img/og-card.jpg`
+
+The script picks the portrait up automatically and crops it to fill the right
+third of the card.
+
+**After changing the card,** ask the platforms to re-read it — they cache
+aggressively:
+
+- LinkedIn — <https://www.linkedin.com/post-inspector/>
+- Facebook — <https://developers.facebook.com/tools/debug/>
+
+One caution: `og:image` must be an **absolute** URL. A relative path is silently
+ignored by every platform, and the preview falls back to no image at all.
+
 ## Images
 
-19 images are in `assets/img/`, pulled from the gym's own Instagram: twelve posts from
+20 images are in `assets/img/` (19 from Instagram, plus the generated sharing card), pulled from the gym's own Instagram: twelve posts from
 August–September 2021, five story-highlight covers, and two in-gym photographs. All are
 square 640px except the two photographs.
 
